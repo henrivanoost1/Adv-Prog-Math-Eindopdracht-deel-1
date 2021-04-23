@@ -9,14 +9,10 @@ statistics = data["age"].describe()
 print(statistics)
 
 # parameters
-# age = data["age"].round(0)
-# print(age)
 parameters = data.round(0)
-print(parameters)
-test1 = data.loc[data.age == 1, "age"].count()
 test2 = parameters.loc[parameters.age == 1, "age"].count()
 
-print(test1)
+# print(test1)
 print(test2)
 
 
