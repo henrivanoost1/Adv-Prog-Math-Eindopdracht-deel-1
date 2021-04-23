@@ -103,11 +103,11 @@ def register_user():
 
     # function to add to JSON
 
-    def write_json(data, filename='client\data.json'):
+    def write_json(data, filename='data\data.json'):
         with open(filename, 'w') as f:
             json.dump(data, f, indent=4)
 
-    with open('client\data.json') as json_file:
+    with open('data\data.json') as json_file:
         data = json.load(json_file)
 
         temp = data['user_info']
@@ -139,7 +139,7 @@ def login_verify():
     username_login_entry.delete(0, END)
     mail_login_entry.delete(0, END)
 
-    database = "client\data.json"
+    database = "data\data.json"
     data = json.loads(open(database).read())
     user_data = data['user_info']
 

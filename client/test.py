@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
-data = pd.read_csv("client\healthcare-dataset-stroke-data.csv")
+data = pd.read_csv("data\healthcare-dataset-stroke-data.csv")
 
 # statistics of age
 statistics = data["age"].describe()
