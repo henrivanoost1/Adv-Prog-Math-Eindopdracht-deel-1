@@ -101,14 +101,13 @@ def register_user():
     username_info = username.get()
     mail_info = mail.get()
 
-
     # function to add to JSON
 
-    def write_json(data, filename='data.json'):
+    def write_json(data, filename='client\data.json'):
         with open(filename, 'w') as f:
             json.dump(data, f, indent=4)
 
-    with open('data.json') as json_file:
+    with open('client\data.json') as json_file:
         data = json.load(json_file)
 
         temp = data['user_info']
@@ -140,7 +139,7 @@ def login_verify():
     username_login_entry.delete(0, END)
     mail_login_entry.delete(0, END)
 
-    database = "data.json"
+    database = "client\data.json"
     data = json.loads(open(database).read())
     user_data = data['user_info']
 
@@ -188,7 +187,7 @@ def password_not_recognised():
     password_not_recog_screen = Toplevel(login_screen)
     password_not_recog_screen.title("Success")
     password_not_recog_screen.geometry("150x100")
-    Label(password_not_recog_screen, text="Invalid Password ").pack()
+    Label(password_not_recog_screen, text="Invalid combination ").pack()
     Button(password_not_recog_screen, text="OK",
            command=delete_password_not_recognised).pack()
 
