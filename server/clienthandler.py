@@ -1,8 +1,15 @@
+
+# import data
 import random
 import threading
 import pickle
 import math
 import os
+import json
+import csv
+
+import sys
+sys.path.append('./data')
 
 
 class ClientHandler(threading.Thread):
@@ -14,6 +21,9 @@ class ClientHandler(threading.Thread):
         self.socketclient = socketclient
         # message queue -> link to gui server
         self.messages_queue = messages_queue
+
+        self.logindata = json.loads(open("data\data.json").read())
+        self.userdata = logindata['user_info']
         # id clienthandler
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
@@ -21,32 +31,46 @@ class ClientHandler(threading.Thread):
 
     def run(self):
 
-        command = pickle.load(self.in_out_clh)
+        # command = pickle.load(self.in_out_clh)
 
-        while (command != "CLOSE"):
-            print(command)
+        # while (command != "CLOSE"):
+        while True:
+            # print(command)
+            io_stream = self.socket_to_client.makefile(mode="rw")
+            msg = io_stream.readline().rstrip("\n")
+            self.add_msg_to_queue(f"Got data:{msg}")
+            data = jsonpickle.decode(msg)
 
-            if (command == "get_random_image"):
+            if (command == "login_data"):
+
                 # filename = 'images/kleuren.jpg'
-                filename = self.getRandomFile()  # hulpmethode
-                f = open(filename, 'rb')
+
+                # filename = self.getRandomFile()  # hulpmethode
+                # f = open(filename, 'rb')
+
+                # database = "data\data.json"
+                # data = json.loads(open(database).read())
+                # user_data = data['user_info']
+                # f = open(user_data, 'rb')
 
                 # bepaal de bestandsgrootte
-                size_in_bytes = os.path.getsize(filename)
+                # size_in_bytes = os.path.getsize(user_data)
                 # bereken hoeveel keer 1024 bytes verstuurd zullen worden
-                number = math.ceil(size_in_bytes / 1024)
+                # number = math.ceil(size_in_bytes / 1024)
 
                 # voorbereiding: ik geef dit aantal door aan de cliënt zodat hij weet hoeveel keer
                 # hij het readcommando zal moeten doen (om zo de afbeelding volledig binnen te halen)
-                pickle.dump("%d" % number, self.in_out_clh)
+                # pickle.dump("%d" % number, self.in_out_clh)
+                pickle.dump(user_data)
+
                 self.in_out_clh.flush()
 
                 # volgende stap: het effectief versturen van de afbeelding
-                l = f.read(1024)
-                while (l):
-                    self.socketclient.send(l)
-                    # volgende 1024 bytes inlezen
-                    l = f.read(1024)
+                # l = f.read(1024)
+                # while (l):
+                #     self.socketclient.send(l)
+                #     # volgende 1024 bytes inlezen
+                #     l = f.read(1024)
 
             # waiting for next commando
             command = pickle.load(self.in_out_clh)
