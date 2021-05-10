@@ -1,66 +1,116 @@
-import random
 import threading
-import pickle
-import math
-import os
+import json
 
 
 class ClientHandler(threading.Thread):
+
     numbers_clienthandlers = 0
 
     def __init__(self, socketclient, messages_queue):
         threading.Thread.__init__(self)
         # connectie with client
-        self.socketclient = socketclient
+        self.socket_to_client = socketclient
         # message queue -> link to gui server
         self.messages_queue = messages_queue
         # id clienthandler
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
-        self.in_out_clh = self.socketclient.makefile(mode='rwb')
 
     def run(self):
+        io_stream_client = self.socket_to_client.makefile(mode='rw')
 
-        command = pickle.load(self.in_out_clh)
+        self.print_bericht_gui_server("Started & waiting...")
+        commando = io_stream_client.readline().rstrip('\n')
+        while (commando != "CLOSE"):
+            msg = io_stream_client.readline().rstrip('\n')
+            self.print_bericht_gui_server(f"Message: {msg}")
 
-        while (command != "CLOSE"):
-            print(command)
+            if msg == "Verify":
+                getal1 = io_stream_client.readline().rstrip('\n')
+                self.print_bericht_gui_server(f"Username: {getal1}")
+                getal2 = io_stream_client.readline().rstrip('\n')
+                self.print_bericht_gui_server(f"Mail: {getal2}")
+                database = "data\data.json"
+                data = json.loads(open(database).read())
+                user_data = data['user_info']
 
-            if (command == "get_random_image"):
-                # filename = 'images/kleuren.jpg'
-                filename = self.getRandomFile()  # hulpmethode
-                f = open(filename, 'rb')
+                user_info = []
+                for i in user_data:
 
-                # bepaal de bestandsgrootte
-                size_in_bytes = os.path.getsize(filename)
-                # bereken hoeveel keer 1024 bytes verstuurd zullen worden
-                number = math.ceil(size_in_bytes / 1024)
+                    if getal1 == i['username']:
 
-                # voorbereiding: ik geef dit aantal door aan de cliënt zodat hij weet hoeveel keer
-                # hij het readcommando zal moeten doen (om zo de afbeelding volledig binnen te halen)
-                pickle.dump("%d" % number, self.in_out_clh)
-                self.in_out_clh.flush()
+                        user_info.append(i['name'])
+                        user_info.append(i['username'])
+                        user_info.append(i['mail'])
+                        user_info.append(i['status'])
 
-                # volgende stap: het effectief versturen van de afbeelding
-                l = f.read(1024)
-                while (l):
-                    self.socketclient.send(l)
-                    # volgende 1024 bytes inlezen
-                    l = f.read(1024)
+                    else:
+                        pass
 
-            # waiting for next commando
-            command = pickle.load(self.in_out_clh)
+                if getal1 in user_info:
+                    if getal2 == user_info[2]:
+                        antw = '1'
+                        with open('data\data.json', 'r') as f:
+                            change = json.load(f)
+
+                        change["user_info"]['username' ==
+                                            getal1]['status'] = 1  # hier plaats je status van login naar 1 dus iedereen dat op 1 staat is ingelogd en er moet op de loguit hetzelfe maar terug naar 0 en dan zijn ze pas uitgelogd
+
+                        with open('data\data.json', 'w') as f:
+                            json.dump(change, f)
+
+                    else:
+                        antw = '2'
+
+                else:
+                    antw = '3'
+
+                user_info.clear()
+                io_stream_client.write(f"{antw}\n")
+                io_stream_client.flush()
+                self.print_bericht_gui_server(
+                    f"Sending verification {antw} back")
+
+
+                    
+            elif msg == "Register":
+                name = io_stream_client.readline().rstrip('\n')
+                self.print_bericht_gui_server(f"Name: {name}")
+                username = io_stream_client.readline().rstrip('\n')
+                self.print_bericht_gui_server(f"Username: {username}")
+                mail = io_stream_client.readline().rstrip('\n')
+                self.print_bericht_gui_server(f"Mail: {mail}")
+                status = io_stream_client.readline().rstrip('\n')
+                self.print_bericht_gui_server(f"Status: {status}")
+
+                def write_json(data, filename='data\data.json'):
+                    with open(filename, 'w') as f:
+                        json.dump(data, f, indent=4)
+
+                with open('data\data.json') as json_file:
+                    data = json.load(json_file)
+
+                    temp = data['user_info']
+
+                    # python object to be appended
+                    y = {"name": name,
+                         "username": username,
+                         "mail": mail,
+                         "status": status
+                         }
+
+                    # appending data to emp_details
+                    temp.append(y)
+
+                write_json(data)
+                # io_stream_client.write(f"{antw}\n")
+                io_stream_client.flush()
+                self.print_bericht_gui_server(f"Registration Compleet")
+
+            commando = io_stream_client.readline().rstrip('\n')
 
         self.print_bericht_gui_server("Connection with client closed...")
-        self.socketclient.close()
+        self.socket_to_client.close()
 
     def print_bericht_gui_server(self, message):
-        self.messages_queue.put("CLH %d:> %s" % (self.id, message))
-
-    def getRandomFile(self):
-        """
-        Returns a random filename, chosen among the files of the given path.
-        """
-        files = os.listdir("images")
-        index = random.randrange(0, len(files))
-        return "images/%s" % files[index]
+        self.messages_queue.put(f"CLH {self.id}:> {message}")
