@@ -1,3 +1,5 @@
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import os
 import json
 import logging
@@ -5,6 +7,8 @@ import socket
 from tkinter import *
 from tkinter import messagebox
 import matplotlib.pyplot as plt
+import matplotlib
+matplotlib.use("TkAgg")
 
 
 class Window(Frame):
@@ -209,7 +213,7 @@ class Window(Frame):
 
         form2_screen = Toplevel(form_screen)
         form2_screen.title("form2")
-        form2_screen.geometry("300x250")
+        form2_screen.geometry("840x680")
 
         # Set text variables
         gender = StringVar()
@@ -233,7 +237,19 @@ class Window(Frame):
             logging.info(f"Sending message: {msg}")
             self.my_writer_obj.flush()
             answer = self.my_writer_obj.readline().rstrip('\n')
-            logging.info(f"Answer server grafiekske: {answer}")
+            logging.info(f"Answer server grafiek: {answer}")
+            array_value = json.loads(answer)
+            map_integer = map(int, array_value)
+            array_integer = list(map_integer)
+
+            Label(form2_screen, text=f"{array_integer}").pack()
+            fig = plt.figure()
+            ax1 = fig.add_subplot(111)
+            genderArr = ['Man', 'Vrouw', 'Anders']
+            plt.bar(genderArr, array_integer)
+            plt.ylabel("Hoeveelheid")
+            plt.xlabel("Gender")
+            plt.show()
 
         except Exception as ex:
             logging.error(f"Foutmelding: {ex}")

@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import csv
+import json
 
 
 class dataHandler():
@@ -26,11 +27,19 @@ class dataHandler():
     def getGraph(self, value):
         df = self.df
         if value == "gender":
-            valueCounts = df["gender"].value_counts()
+            arr_value = []
+            aantal_man = df[df["gender"] == "Male"].id.count()
+            arr_value.append(str(aantal_man))
+            aantal_vrouw = df[df["gender"] == "Female"].id.count()
+            arr_value.append(str(aantal_vrouw))
+            aantal_anders = df[df["gender"] == "Other"].id.count()
+            arr_value.append(str(aantal_anders))
+            array_to_json = json.dumps(arr_value)
+            # arr_value[aantal_man, aantal_vrouw, aantal_anders]
         elif value == "heart_disease":
             valueCounts = df["heart_disease"].value_counts()
 
-        return valueCounts
+        return array_to_json
 
     def getStatistics(self):
         df = self.df
