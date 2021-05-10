@@ -4,6 +4,7 @@ import logging
 import socket
 from tkinter import *
 from tkinter import messagebox
+import matplotlib.pyplot as plt
 
 
 class Window(Frame):
@@ -13,6 +14,7 @@ class Window(Frame):
         self.master = master
         self.init_window()
         self.makeConnnectionWithServer()
+        # self.antwoordParam = Tkinter.StringVar()
 
     # Creation of init_window
 
@@ -132,7 +134,7 @@ class Window(Frame):
                width=10, height=1, command=self.form1).pack()
         Label(form_screen, text="").pack()
         Button(form_screen, text="Question 2",
-               width=10, height=1).pack()
+               width=10, height=1, command=self.form2).pack()
         Label(form_screen, text="").pack()
         Button(form_screen, text="Question 3",
                width=10, height=1).pack()
@@ -144,7 +146,7 @@ class Window(Frame):
         # but it is displayed in a separate, top-level window.
         # Such windows usually have title bars, borders, and other “window decorations”.
         # And in argument we have to pass global screen variable
-
+        global form1_screen
         form1_screen = Toplevel(form_screen)
         form1_screen.title("form1")
         form1_screen.geometry("300x250")
@@ -152,7 +154,10 @@ class Window(Frame):
         # Set text variables
         global ageParam
         ageParam = IntVar()
-        gender = StringVar()
+        # global antwoord
+        # antwoord = StringVar()
+        # antwoord = "Antwoord= "
+        # self.antwoordParam.set("Test")
         # Set label for user's instruction
         Label(form1_screen, text="Please enter details below").pack()
         Label(form1_screen, text="").pack()
@@ -193,6 +198,48 @@ class Window(Frame):
         Button(form1_screen, text="Search", width=10,
                height=1, command=self.get_parameters).pack()
 
+        Label(form1_screen, text="").pack()
+
+    def form2(self):
+            # The Toplevel widget work pretty much like Frame,
+        # but it is displayed in a separate, top-level window.
+        # Such windows usually have title bars, borders, and other “window decorations”.
+        # And in argument we have to pass global screen variable
+        global form2_screen
+
+        form2_screen = Toplevel(form_screen)
+        form2_screen.title("form2")
+        form2_screen.geometry("300x250")
+
+        # Set text variables
+        gender = StringVar()
+        hart_disease = StringVar()
+        # Set label for user's instruction
+        Label(form2_screen, text="Please choose something to see the graph").pack()
+        Label(form2_screen, text="").pack()
+
+        # Set register button
+        Button(form2_screen, text="Gender", width=10,
+               height=1, command=self.get_gender_graph).pack()
+        Label(form2_screen, text="").pack()
+        Button(form2_screen, text="Hart Disease", width=10, height=1).pack()
+        Label(form2_screen, text="").pack()
+
+    def get_gender_graph(self):
+        try:
+            msg = "Get Gender Graph"
+            self.my_writer_obj.write("Verifying\n")
+            self.my_writer_obj.write(f"{msg}\n")
+            logging.info(f"Sending message: {msg}")
+            self.my_writer_obj.flush()
+            answer = self.my_writer_obj.readline().rstrip('\n')
+            logging.info(f"Answer server grafiekske: {answer}")
+
+        except Exception as ex:
+            logging.error(f"Foutmelding: {ex}")
+            messagebox.showinfo("Getting graph gender",
+                                "Something has gone wrong...")
+
     def get_parameters(self):
         try:
             age1 = ageParam.get()
@@ -204,6 +251,12 @@ class Window(Frame):
             self.my_writer_obj.write("%s\n" % age1)
             logging.info(f"Sending age: {age1}")
             self.my_writer_obj.flush()
+            answer = self.my_writer_obj.readline().rstrip('\n')
+            logging.info(f"Answer server parameter: {answer}")
+            antwoord = f"Antwoord: {answer}"
+            # self.antwoordParam.set(antwoord)
+            Label(form1_screen, text=antwoord).pack()
+
         except Exception as ex:
             logging.error(f"Foutmelding: {ex}")
             messagebox.showinfo("Getting parameters",

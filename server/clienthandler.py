@@ -19,7 +19,7 @@ class ClientHandler(threading.Thread):
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
 
-        self.dataHandler = calcData.dataHandler()
+        self.datahandler = calcData.dataHandler()
 
     def run(self):
         io_stream_client = self.socket_to_client.makefile(mode='rw')
@@ -115,8 +115,24 @@ class ClientHandler(threading.Thread):
                 # data = data.data.dataHandler
                 age1 = io_stream_client.readline().rstrip('\n')
                 self.print_bericht_gui_server(f"Age: {age1}")
-                result = dataHandler.getParameters(age1)
+                result = self.datahandler.getParameters(age1)
                 self.print_bericht_gui_server(f"Age result: {result}")
+                io_stream_client.write(f"{result}\n")
+                io_stream_client.flush()
+
+            elif msg == "Get Gender Graph":
+                result = self.datahandler.getGraph("gender")
+                self.print_bericht_gui_server(result)
+                io_stream_client.write(f"{result}\n")
+                io_stream_client.flush()
+
+                # data = data.data.dataHandler
+                # age1 = io_stream_client.readline().rstrip('\n')
+                # self.print_bericht_gui_server(f"Age: {age1}")
+                # result = self.datahandler.getParameters(age1)
+                # self.print_bericht_gui_server(f"Age result: {result}")
+                # io_stream_client.write(f"{result}\n")
+                # io_stream_client.flush()
 
             commando = io_stream_client.readline().rstrip('\n')
 
