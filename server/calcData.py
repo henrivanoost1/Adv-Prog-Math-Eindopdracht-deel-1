@@ -37,7 +37,12 @@ class dataHandler():
             array_to_json = json.dumps(arr_value)
             # arr_value[aantal_man, aantal_vrouw, aantal_anders]
         elif value == "heart_disease":
-            valueCounts = df["heart_disease"].value_counts()
+            arr_value = []
+            aantal_yes = df[df["heart_disease"] == 1].id.count()
+            arr_value.append(str(aantal_yes))
+            aantal_no = df[df["heart_disease"] == 0].id.count()
+            arr_value.append(str(aantal_no))
+            array_to_json = json.dumps(arr_value)
 
         return array_to_json
 
@@ -45,7 +50,10 @@ class dataHandler():
         df = self.df
         # statistics of age
         statistics = df["age"].describe()
-        return statistics
+        json1 = "{"+f'"Type": {statistics.index.values.tolist()}, "Value": {statistics.values.tolist()}'+"}"
+        json1 = json1.replace("'", '"')
+        return json1
+        # json_temp = json.loads(json1)
 
     def getParameters(self, age1):
          # parameters

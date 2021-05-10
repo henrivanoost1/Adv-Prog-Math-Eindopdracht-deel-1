@@ -134,6 +134,18 @@ class ClientHandler(threading.Thread):
                 # io_stream_client.write(f"{result}\n")
                 # io_stream_client.flush()
 
+            elif msg == "Get Heart Disease Graph":
+                result = self.datahandler.getGraph("heart_disease")
+                self.print_bericht_gui_server(result)
+                io_stream_client.write(f"{result}\n")
+                io_stream_client.flush()
+
+            elif msg == "Get Statistic Data":
+                result = self.datahandler.getStatistics()
+                self.print_bericht_gui_server(result)
+                io_stream_client.write(f"{result}\n")
+                io_stream_client.flush()
+
             commando = io_stream_client.readline().rstrip('\n')
 
         self.print_bericht_gui_server("Connection with client closed...")

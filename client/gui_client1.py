@@ -141,7 +141,7 @@ class Window(Frame):
                width=10, height=1, command=self.form2).pack()
         Label(form_screen, text="").pack()
         Button(form_screen, text="Question 3",
-               width=10, height=1).pack()
+               width=10, height=1, command=self.form3).pack()
         Label(form_screen, text="").pack()
 
     def form1(self):
@@ -226,8 +226,59 @@ class Window(Frame):
         Button(form2_screen, text="Gender", width=10,
                height=1, command=self.get_gender_graph).pack()
         Label(form2_screen, text="").pack()
-        Button(form2_screen, text="Hart Disease", width=10, height=1).pack()
+        Button(form2_screen, text="Hart Disease", width=10,
+               height=1, command=self.get_heartdisease_graph).pack()
         Label(form2_screen, text="").pack()
+
+    def form3(self):
+        global form3_screen
+
+        form3_screen = Toplevel(form_screen)
+        form3_screen.title("form3")
+        form3_screen.geometry("500x250")
+        Button(form3_screen, text="Statistische data van de leeftijd", width=30,
+               height=1, command=self.get_statistic_data).pack()
+
+    def get_statistic_data(self):
+        try:
+            msg = "Get Statistic Data"
+            self.my_writer_obj.write("Verifying\n")
+            self.my_writer_obj.write(f"{msg}\n")
+            logging.info(f"Sending message: {msg}")
+            self.my_writer_obj.flush()
+            answer = self.my_writer_obj.readline().rstrip('\n')
+            logging.info(f"Answer server grafiek: {answer}")
+            json_temp = json.loads(answer)
+            values = list(json_temp.values())
+            # answers = Text()
+            # Label(form3_screen, text=values).pack()
+            # rows = []
+            # for i in range(2):
+            #     cols = []
+            #     for j in range(8):
+            #         e = Entry(relief=GROOVE)
+            #         e.grid(row=i, column=j, sticky=NSEW)
+            #         e.insert(0, values[i][j])
+            #         cols.append(e)
+            #     rows.append(cols)
+            zin = ""
+            zin2 = ""
+            for i in values[0]:
+
+                zin = zin.upper()+f'{str(i)}'+"   "
+            for i in values[1]:
+
+                zin2 = zin2.upper()+f'{str(round(i,2))}'+"   "
+            Label(form3_screen, text=zin, font=("Calibri", 13)).pack()
+            Label(form3_screen, text=zin2, font=("Calibri", 13)).pack()
+
+            #     answers.insert(END, '{}={}\n'.format(i, answers[i]))
+            # answers.config(state=DISABLED)
+
+        except Exception as ex:
+            logging.error(f"Foutmelding: {ex}")
+            messagebox.showinfo("Getting statistic data",
+                                "Something has gone wrong...")
 
     def get_gender_graph(self):
         try:
@@ -242,13 +293,38 @@ class Window(Frame):
             map_integer = map(int, array_value)
             array_integer = list(map_integer)
 
-            Label(form2_screen, text=f"{array_integer}").pack()
             fig = plt.figure()
             ax1 = fig.add_subplot(111)
             genderArr = ['Man', 'Vrouw', 'Anders']
             plt.bar(genderArr, array_integer)
             plt.ylabel("Hoeveelheid")
             plt.xlabel("Gender")
+            plt.show()
+
+        except Exception as ex:
+            logging.error(f"Foutmelding: {ex}")
+            messagebox.showinfo("Getting graph gender",
+                                "Something has gone wrong...")
+
+    def get_heartdisease_graph(self):
+        try:
+            msg = "Get Heart Disease Graph"
+            self.my_writer_obj.write("Verifying\n")
+            self.my_writer_obj.write(f"{msg}\n")
+            logging.info(f"Sending message: {msg}")
+            self.my_writer_obj.flush()
+            answer = self.my_writer_obj.readline().rstrip('\n')
+            logging.info(f"Answer server grafiek: {answer}")
+            array_value = json.loads(answer)
+            map_integer = map(int, array_value)
+            array_integer = list(map_integer)
+
+            fig = plt.figure()
+            ax1 = fig.add_subplot(111)
+            genderArr = ['Ja', 'Nee']
+            plt.bar(genderArr, array_integer)
+            plt.ylabel("Hoeveelheid")
+            plt.xlabel("Hartaandoening")
             plt.show()
 
         except Exception as ex:
