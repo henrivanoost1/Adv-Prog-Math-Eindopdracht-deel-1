@@ -17,16 +17,17 @@ class Window(Frame):
     # Creation of init_window
 
     def init_window(self):
-        # global main_screen
-        # main_screen = Tk()
-        self.master.geometry("300x250")
-        self.master.title("Account Login")
-        Label(text="Select Your Choice", width="300",
+        global main_screen
+        main_screen = Toplevel(self.master)
+        main_screen.geometry("300x250")
+        main_screen.title("Account Login")
+        Label(main_screen, text="Select Your Choice", width="300",
               height="2", font=("Calibri", 13)).pack()
-        Label(text="").pack()
-        Button(text="Login", height="2", width="30", command=self.login).pack()
-        Label(text="").pack()
-        Button(text="Register", height="2",
+        Label(main_screen, text="").pack()
+        Button(main_screen, text="Login", height="2",
+               width="30", command=self.login).pack()
+        Label(main_screen, text="").pack()
+        Button(main_screen, text="Register", height="2",
                width="30", command=self.register).pack()
 
         # main_screen.mainloop()
@@ -118,6 +119,96 @@ class Window(Frame):
         Button(register_screen, text="Register", width=10,
                height=1, command=self.register_user).pack()
 
+    def form(self):
+        global form_screen
+        form_screen = Toplevel(self.master)
+        form_screen.title("Form")
+        form_screen.geometry("300x250")
+
+        Label(form_screen, text="Please choose a question").pack()
+        Label(form_screen, text="").pack()
+
+        Button(form_screen, text="Question 1",
+               width=10, height=1, command=self.form1).pack()
+        Label(form_screen, text="").pack()
+        Button(form_screen, text="Question 2",
+               width=10, height=1).pack()
+        Label(form_screen, text="").pack()
+        Button(form_screen, text="Question 3",
+               width=10, height=1).pack()
+        Label(form_screen, text="").pack()
+
+    def form1(self):
+
+        # The Toplevel widget work pretty much like Frame,
+        # but it is displayed in a separate, top-level window.
+        # Such windows usually have title bars, borders, and other “window decorations”.
+        # And in argument we have to pass global screen variable
+
+        form1_screen = Toplevel(form_screen)
+        form1_screen.title("form1")
+        form1_screen.geometry("300x250")
+
+        # Set text variables
+        global ageParam
+        ageParam = IntVar()
+        gender = StringVar()
+        # Set label for user's instruction
+        Label(form1_screen, text="Please enter details below").pack()
+        Label(form1_screen, text="").pack()
+
+        # Set age label
+        name_lable = Label(form1_screen, text="Age")
+        name_lable.pack()
+
+        # Set age entry
+        # The Entry widget is a standard Tkinter widget used to enter or display a single line of text.
+
+        name_entry = Entry(form1_screen, textvariable=ageParam)
+        name_entry.pack()
+        Label(form1_screen, text="").pack()
+
+        # # Set gender label
+        # gender_lable = Label(form1_screen, text="Gender")
+        # gender_lable.pack()
+
+        # # Set gender entry
+        # # The Entry widget is a standard Tkinter widget used to enter or display a single line of text.
+
+        # gender_radio1 = Radiobutton(
+        #     form1_screen, text="Male", variable=gender, value="male")
+        # gender_radio1.pack()
+
+        # gender_radio2 = Radiobutton(
+        #     form1_screen, text="Female", variable=gender, value="female")
+        # gender_radio2.pack()
+
+        # gender_radio3 = Radiobutton(
+        #     form1_screen, text="Other", variable=gender, value="other")
+        # gender_radio3.pack()
+
+        # Label(form1_screen, text="").pack()
+
+        # Set register button
+        Button(form1_screen, text="Search", width=10,
+               height=1, command=self.get_parameters).pack()
+
+    def get_parameters(self):
+        try:
+            age1 = ageParam.get()
+            msg = "Get parameters"
+
+            self.my_writer_obj.write("Verifying\n")
+            self.my_writer_obj.write(f"{msg}\n")
+            logging.info(f"Sending message: {msg}")
+            self.my_writer_obj.write("%s\n" % age1)
+            logging.info(f"Sending age: {age1}")
+            self.my_writer_obj.flush()
+        except Exception as ex:
+            logging.error(f"Foutmelding: {ex}")
+            messagebox.showinfo("Getting parameters",
+                                "Something has gone wrong...")
+
     def login_verify(self):
 
         try:
@@ -179,15 +270,24 @@ class Window(Frame):
 
         Label(register_screen, text="Registration Success",
               fg="green", font=("calibri", 11)).pack()
+        register_screen.after(1000, register_screen.destroy)
+        self.login()
 
     def login_sucess(self):
-        global login_success_screen
-        login_success_screen = Toplevel(login_screen)
-        login_success_screen.title("Success")
-        login_success_screen.geometry("150x100")
-        Label(login_success_screen, text="Login Success").pack()
-        Button(login_success_screen, text="OK",
-               command=self.delete_login_success).pack()
+        # global login_success_screen
+        # login_success_screen = Toplevel(login_screen)
+        # login_success_screen.title("Success")
+        # login_success_screen.geometry("150x100")
+        # Label(login_success_screen, text="Login Success").pack()
+        # Button(login_success_screen, text="OK",
+        #        command=self.delete_login_success).pack()
+        Label(login_screen, text="Login Success",
+              fg="green", font=("calibri", 11)).pack()
+        Label(login_screen, text="Please wait until this window closes",
+              fg="black", font=("calibri", 11)).pack()
+        login_screen.after(1000, login_screen.destroy)
+        main_screen.after(1000, main_screen.destroy)
+        self.form()
 
     # Designing popup for login invalid password
 
@@ -214,7 +314,8 @@ class Window(Frame):
     # Deleting popups
 
     def delete_login_success(self):
-        login_success_screen.destroy()
+        # login_success_screen.destroy()
+        pass
 
     def delete_password_not_recognised(self):
         password_not_recog_screen.destroy()

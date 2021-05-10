@@ -13,14 +13,14 @@ class dataHandler():
         df = pd.read_csv("data\healthcare-dataset-stroke-data.csv")
 
         # print(test1)
-        print(test2)
+        # getParameters(1)
 
         # chart of chosen subject
-        valueCounts = df["gender"].value_counts()
-        valueCounts.plot.bar()
-        plt.ylabel('Counts')
-        plt.title("Gender")
-        plt.show()
+        # valueCounts = df["gender"].value_counts()
+        # valueCounts.plot.bar()
+        # plt.ylabel('Counts')
+        # plt.title("Gender")
+        # plt.show()
         return df
 
     def getStatistics(self):
@@ -29,9 +29,13 @@ class dataHandler():
         statistics = df["age"].describe()
         return statistics
 
-    def getParameters(self):
+    def getParameters(self, age1):
          # parameters
+        # df = pd.read_csv("data\healthcare-dataset-stroke-data.csv")
         df = self.df
         parameters = df.round(0)
-        test2 = parameters.loc[parameters.age == 1, "age"].count()
-        return test2
+        age = int(age1)
+        result = parameters.loc[parameters.age == age1, "age"].count()
+        result
+        print(result)
+        return result

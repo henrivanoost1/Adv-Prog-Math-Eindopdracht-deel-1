@@ -1,5 +1,8 @@
-import threading
+
 import json
+import threading
+import sys
+import calcData
 
 
 class ClientHandler(threading.Thread):
@@ -15,6 +18,8 @@ class ClientHandler(threading.Thread):
         # id clienthandler
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
+
+        self.dataHandler = calcData.dataHandler()
 
     def run(self):
         io_stream_client = self.socket_to_client.makefile(mode='rw')
@@ -71,8 +76,6 @@ class ClientHandler(threading.Thread):
                 self.print_bericht_gui_server(
                     f"Sending verification {antw} back")
 
-
-                    
             elif msg == "Register":
                 name = io_stream_client.readline().rstrip('\n')
                 self.print_bericht_gui_server(f"Name: {name}")
@@ -96,7 +99,7 @@ class ClientHandler(threading.Thread):
                     y = {"name": name,
                          "username": username,
                          "mail": mail,
-                         "status": status
+                         "status": int(status)
                          }
 
                     # appending data to emp_details
@@ -106,6 +109,14 @@ class ClientHandler(threading.Thread):
                 # io_stream_client.write(f"{antw}\n")
                 io_stream_client.flush()
                 self.print_bericht_gui_server(f"Registration Compleet")
+
+            elif msg == "Get parameters":
+
+                # data = data.data.dataHandler
+                age1 = io_stream_client.readline().rstrip('\n')
+                self.print_bericht_gui_server(f"Age: {age1}")
+                result = dataHandler.getParameters(age1)
+                self.print_bericht_gui_server(f"Age result: {result}")
 
             commando = io_stream_client.readline().rstrip('\n')
 
