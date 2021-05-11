@@ -143,6 +143,16 @@ class Window(Frame):
         Button(form_screen, text="Question 3",
                width=10, height=1, command=self.form3).pack()
         Label(form_screen, text="").pack()
+        Button(form_screen, text="Log out",
+               width=10, height=1, command=self.log_out).pack()
+
+    def log_out(self):
+        msg = "Log out"
+        self.my_writer_obj.write("Verifying\n")
+        self.my_writer_obj.write(f"{msg}\n")
+        logging.info(f"Sending message: {msg}")
+        self.my_writer_obj.flush()
+        form_screen.destroy()
 
     def form1(self):
 

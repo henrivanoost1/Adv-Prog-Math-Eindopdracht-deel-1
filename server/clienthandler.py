@@ -3,6 +3,7 @@ import json
 import threading
 import sys
 import calcData
+import gui_server
 
 
 class ClientHandler(threading.Thread):
@@ -16,6 +17,7 @@ class ClientHandler(threading.Thread):
         # message queue -> link to gui server
         self.messages_queue = messages_queue
         # id clienthandler
+
         self.id = ClientHandler.numbers_clienthandlers
         ClientHandler.numbers_clienthandlers += 1
 
@@ -52,17 +54,18 @@ class ClientHandler(threading.Thread):
                     else:
                         pass
 
-                if getal1 in user_info:
+                if getal1 == user_info[1]:
                     if getal2 == user_info[2]:
                         antw = '1'
                         with open('data\data.json', 'r') as f:
                             change = json.load(f)
 
-                        change["user_info"]['username' ==
-                                            getal1]['status'] = 1  # hier plaats je status van login naar 1 dus iedereen dat op 1 staat is ingelogd en er moet op de loguit hetzelfe maar terug naar 0 en dan zijn ze pas uitgelogd
+                        # hier plaats je status van login naar 1 dus iedereen dat op 1 staat is ingelogd en er moet op de loguit hetzelfe maar terug naar 0 en dan zijn ze pas uitgelogd
+                        change["user_info"]["username" ==
+                                            f'"{getal1}"']["status"] = 1
 
                         with open('data\data.json', 'w') as f:
-                            json.dump(change, f)
+                            json.dump(change, f, indent=4)
 
                     else:
                         antw = '2'
@@ -119,12 +122,16 @@ class ClientHandler(threading.Thread):
                 self.print_bericht_gui_server(f"Age result: {result}")
                 io_stream_client.write(f"{result}\n")
                 io_stream_client.flush()
+                self.print_popular_search_server(
+                    "Most requested data: parameter age")
 
             elif msg == "Get Gender Graph":
                 result = self.datahandler.getGraph("gender")
                 self.print_bericht_gui_server(result)
                 io_stream_client.write(f"{result}\n")
                 io_stream_client.flush()
+                self.print_popular_search_server(
+                    "Most requested data: gender graph")
 
                 # data = data.data.dataHandler
                 # age1 = io_stream_client.readline().rstrip('\n')
@@ -139,12 +146,22 @@ class ClientHandler(threading.Thread):
                 self.print_bericht_gui_server(result)
                 io_stream_client.write(f"{result}\n")
                 io_stream_client.flush()
+                self.print_popular_search_server(
+                    "Most requested data: heart disease graph")
 
             elif msg == "Get Statistic Data":
                 result = self.datahandler.getStatistics()
                 self.print_bericht_gui_server(result)
                 io_stream_client.write(f"{result}\n")
                 io_stream_client.flush()
+                self.print_popular_search_server(
+                    "Most requested data: statistics")
+
+            elif msg == "Log out":
+
+                self.print_bericht_gui_server(msg)
+                # io_stream_client.write(f"{result}\n")
+                # io_stream_client.flush()
 
             commando = io_stream_client.readline().rstrip('\n')
 
@@ -152,4 +169,12 @@ class ClientHandler(threading.Thread):
         self.socket_to_client.close()
 
     def print_bericht_gui_server(self, message):
-        self.messages_queue.put(f"CLH {self.id}:> {message}")
+        self.messages_queue.put(f"CLH :> {message}")
+
+    def print_popular_search_server(self, message):
+        # self.lstpopular.insert(END, message)
+        self.messages_queue.put(f"CLH :> {message}")
+
+        # list_search = []
+        # list_search.append(message)
+        # self.lstp

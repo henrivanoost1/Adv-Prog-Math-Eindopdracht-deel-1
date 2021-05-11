@@ -59,9 +59,9 @@ class dataHandler():
          # parameters
         # df = pd.read_csv("data\healthcare-dataset-stroke-data.csv")
         df = self.df
-        parameters = df.round(0)
+
         age = int(age1)
-        result = parameters.loc[parameters.age == age, "age"].count()
+        result = df[df["age"] == age].id.count()
 
         print(result)
         return result

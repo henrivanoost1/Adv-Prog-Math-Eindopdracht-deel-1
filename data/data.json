@@ -1,1 +1,46 @@
-{"user_info": [{"name": "11", "username": "22", "mail": "33", "status": 1}, {"name": "laurens", "username": "LaurensW", "mail": "laurensw@gmail.com", "status": 0}, {"name": "henri", "username": "HenriVO", "mail": "henri@gmail.com", "status": 0}, {"name": "Test", "username": "Test1", "mail": "test@gmail.com", "status": 0}, {"name": "Bartje", "username": "jonasz", "mail": "jonas@gmail.com", "status": "0"}, {"name": "margaux", "username": "marga", "mail": "marvo@gmail.com", "status": "0"}, {"name": "maud", "username": "maudcarre", "mail": "mc@gmail.com", "status": 0}]}
+{
+    "user_info": [
+        {
+            "name": "11",
+            "username": "22",
+            "mail": "33",
+            "status": 1
+        },
+        {
+            "name": "laurens",
+            "username": "LaurensW",
+            "mail": "laurensw@gmail.com",
+            "status": 0
+        },
+        {
+            "name": "henri",
+            "username": "HenriVO",
+            "mail": "henri@gmail.com",
+            "status": 0
+        },
+        {
+            "name": "Test",
+            "username": "Test1",
+            "mail": "test@gmail.com",
+            "status": 0
+        },
+        {
+            "name": "Bartje",
+            "username": "jonasz",
+            "mail": "jonas@gmail.com",
+            "status": "0"
+        },
+        {
+            "name": "margaux",
+            "username": "marga",
+            "mail": "marvo@gmail.com",
+            "status": "0"
+        },
+        {
+            "name": "maud",
+            "username": "maudcarre",
+            "mail": "mc@gmail.com",
+            "status": 0
+        }
+    ]
+}
