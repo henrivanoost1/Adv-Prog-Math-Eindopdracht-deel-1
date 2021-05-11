@@ -12,16 +12,6 @@ class dataHandler():
 
     def getData(self):
         df = pd.read_csv("data\healthcare-dataset-stroke-data.csv")
-
-        # print(test1)
-        # getParameters(1)
-
-        # chart of chosen subject
-        # valueCounts = df["gender"].value_counts()
-        # valueCounts.plot.bar()
-        # plt.ylabel('Counts')
-        # plt.title("Gender")
-        # plt.show()
         return df
 
     def getGraph(self, value):
@@ -58,15 +48,11 @@ class dataHandler():
         json1 = "{"+f'"Type": {statistics.index.values.tolist()}, "Value": {statistics.values.tolist()}'+"}"
         json1 = json1.replace("'", '"')
         return json1
-        # json_temp = json.loads(json1)
 
     def getParameters(self, age1):
          # parameters
-        # df = pd.read_csv("data\healthcare-dataset-stroke-data.csv")
         df = self.df
-
         age = int(age1)
         result = df[df["age"] == age].where(df["stroke"] == 1).id.count()
-
         print(result)
         return result

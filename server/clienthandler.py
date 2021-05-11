@@ -54,25 +54,16 @@ class ClientHandler(threading.Thread):
                     else:
                         pass
 
+                # hier checkt hij of de user voldoet aan beide parameters
                 if getal1 in user_info:
                     if getal2 == user_info[2]:
                         antw = '1'
-                        # with open('data\data.json', 'r') as f:
-                        #     change = json.load(f)
-
-                        # # hier plaats je status van login naar 1 dus iedereen dat op 1 staat is ingelogd en er moet op de loguit hetzelfe maar terug naar 0 en dan zijn ze pas uitgelogd
-                        # change["user_info"]["username" ==
-                        #                     f'"{getal1}"']["status"] = 1
-
-                        # with open('data\data.json', 'w') as f:
-                        #     json.dump(change, f, indent=4)
-
                     else:
                         antw = '2'
-
                 else:
                     antw = '3'
 
+                # geef de user status 1 indien ze zijn ingelogd
                 for user in user_data:
                     username_from_json = user["username"]
 
@@ -118,13 +109,12 @@ class ClientHandler(threading.Thread):
                     temp.append(y)
 
                 write_json(data)
-                # io_stream_client.write(f"{antw}\n")
+
                 io_stream_client.flush()
                 self.print_bericht_gui_server(f"Registration Compleet")
 
             elif msg == "Get parameters":
 
-                # data = data.data.dataHandler
                 age1 = io_stream_client.readline().rstrip('\n')
                 self.print_bericht_gui_server(f"Age: {age1}")
                 result = self.datahandler.getParameters(age1)
@@ -141,14 +131,6 @@ class ClientHandler(threading.Thread):
                 io_stream_client.flush()
                 self.print_popular_search_server(
                     "Most requested data: gender graph")
-
-                # data = data.data.dataHandler
-                # age1 = io_stream_client.readline().rstrip('\n')
-                # self.print_bericht_gui_server(f"Age: {age1}")
-                # result = self.datahandler.getParameters(age1)
-                # self.print_bericht_gui_server(f"Age result: {result}")
-                # io_stream_client.write(f"{result}\n")
-                # io_stream_client.flush()
 
             elif msg == "Get Heart Disease Graph":
                 result = self.datahandler.getGraph("heart_disease")
@@ -185,8 +167,6 @@ class ClientHandler(threading.Thread):
                     json.dump(data, w, indent=4)
 
                 self.print_bericht_gui_server("log out succes")
-                # io_stream_client.write(f"{result}\n")
-                # io_stream_client.flush()
 
             commando = io_stream_client.readline().rstrip('\n')
 
@@ -197,9 +177,4 @@ class ClientHandler(threading.Thread):
         self.messages_queue.put(f"CLH :> {message}")
 
     def print_popular_search_server(self, message):
-        # self.lstpopular.insert(END, message)
         self.messages_queue.put(f"CLH :> {message}")
-
-        # list_search = []
-        # list_search.append(message)
-        # self.lstp

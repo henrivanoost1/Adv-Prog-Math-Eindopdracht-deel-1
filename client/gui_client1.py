@@ -19,7 +19,6 @@ class Window(Frame):
         self.init_window()
         self.makeConnnectionWithServer()
         self.username = ""
-        # self.antwoordParam = Tkinter.StringVar()
 
     # Creation of init_window
 
@@ -170,11 +169,6 @@ class Window(Frame):
         # Set text variables
         global ageParam
         ageParam = IntVar()
-        # global antwoord
-        # antwoord = StringVar()
-        # antwoord = "Antwoord= "
-        # self.antwoordParam.set("Test")
-        # Set label for user's instruction
         Label(form1_screen, text="Please enter details below").pack()
         Label(form1_screen, text="").pack()
 
@@ -188,32 +182,8 @@ class Window(Frame):
         name_entry = Entry(form1_screen, textvariable=ageParam)
         name_entry.pack()
         Label(form1_screen, text="").pack()
-
-        # # Set gender label
-        # gender_lable = Label(form1_screen, text="Gender")
-        # gender_lable.pack()
-
-        # # Set gender entry
-        # # The Entry widget is a standard Tkinter widget used to enter or display a single line of text.
-
-        # gender_radio1 = Radiobutton(
-        #     form1_screen, text="Male", variable=gender, value="male")
-        # gender_radio1.pack()
-
-        # gender_radio2 = Radiobutton(
-        #     form1_screen, text="Female", variable=gender, value="female")
-        # gender_radio2.pack()
-
-        # gender_radio3 = Radiobutton(
-        #     form1_screen, text="Other", variable=gender, value="other")
-        # gender_radio3.pack()
-
-        # Label(form1_screen, text="").pack()
-
-        # Set register button
         Button(form1_screen, text="Search", width=10,
                height=1, command=self.get_parameters).pack()
-
         Label(form1_screen, text="").pack()
 
     def form2(self):
@@ -262,6 +232,7 @@ class Window(Frame):
             logging.info(f"Answer server grafiek: {answer}")
             json_temp = json.loads(answer)
             values = list(json_temp.values())
+            # POGING OM HET IN EEN TABEL TE STEKEN
             # answers = Text()
             # Label(form3_screen, text=values).pack()
             # rows = []
@@ -276,16 +247,12 @@ class Window(Frame):
             zin = ""
             zin2 = ""
             for i in values[0]:
-
                 zin = zin.upper()+f'{str(i)}'+"   "
             for i in values[1]:
-
                 zin2 = zin2.upper()+f'{str(round(i,2))}'+"   "
+
             Label(form3_screen, text=zin, font=("Calibri", 13)).pack()
             Label(form3_screen, text=zin2, font=("Calibri", 13)).pack()
-
-            #     answers.insert(END, '{}={}\n'.format(i, answers[i]))
-            # answers.config(state=DISABLED)
 
         except Exception as ex:
             logging.error(f"Foutmelding: {ex}")
@@ -358,7 +325,6 @@ class Window(Frame):
             answer = self.my_writer_obj.readline().rstrip('\n')
             logging.info(f"Answer server parameter: {answer}")
             antwoord = f"Antwoord: {answer}"
-            # self.antwoordParam.set(antwoord)
             Label(form1_screen, text=antwoord).pack()
 
         except Exception as ex:
@@ -420,7 +386,6 @@ class Window(Frame):
         logging.info(f"Sending status: {status}")
 
         self.my_writer_obj.flush()
-        # function to add to JSON
 
         name_entry.delete(0, END)
         username_entry.delete(0, END)
@@ -432,14 +397,6 @@ class Window(Frame):
         self.login()
 
     def login_sucess(self):
-        # global login_success_screen
-        # login_success_screen = Toplevel(login_screen)
-        # login_success_screen.title("Success")
-        # login_success_screen.geometry("150x100")
-        # Label(login_success_screen, text="Login Success").pack()
-        # Button(login_success_screen, text="OK",
-        #        command=self.delete_login_success).pack()
-
         Label(login_screen, text="Login Success",
               fg="green", font=("calibri", 11)).pack()
         Label(login_screen, text="Please wait until this window closes",

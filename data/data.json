@@ -28,13 +28,13 @@
             "name": "Bartje",
             "username": "jonasz",
             "mail": "jonas@gmail.com",
-            "status": "0"
+            "status": 0
         },
         {
             "name": "margaux",
             "username": "marga",
             "mail": "marvo@gmail.com",
-            "status": "0"
+            "status": 0
         },
         {
             "name": "maud",
@@ -46,6 +46,12 @@
             "name": "thibault",
             "username": "tibo",
             "mail": "tibo@mailtje.com",
+            "status": 0
+        },
+        {
+            "name": "ann",
+            "username": "annie",
+            "mail": "annie@mail.com",
             "status": 0
         }
     ]

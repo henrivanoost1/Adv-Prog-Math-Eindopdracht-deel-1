@@ -63,6 +63,9 @@ class ServerWindow(Frame):
 
         self.lstonline.grid(row=11, column=0, sticky=N + S + E + W)
         self.scrollbar3.grid(row=11, column=1, sticky=N + S)
+
+        # HIERONDER IN COMMENTAAR WERKTE NOG NIET
+
         # self.buttonMessage = Button(
         #     self, textvariable="Send Message", command=self.start_stop_server)
         # self.buttonServer.grid(row=3, column=0, columnspan=2, pady=(
@@ -94,7 +97,6 @@ class ServerWindow(Frame):
     def afsluiten_server(self):
         if self.server != None:
             self.server.close_server_socket()
-        # del (self.messages_queue)
 
     def print_messsages_from_queue(self):
         message = self.messages_queue.get()
@@ -129,6 +131,8 @@ class ServerWindow(Frame):
                 message = self.messages_queue.get()
 
         print("queue stop")
+
+    # DIT WAS VOOR LIST VAN POPULAR SEARCHES
 
     # def print_messsages_from_queue(self):
     #     message = self.messages_queue.get()
@@ -212,8 +216,6 @@ class ServerWindow(Frame):
     def get_data_users(self):
         users = self.get_users()
         clients = []
-        # name_online_user
-
         for user in users['user_info']:
             clients.append(user['name'])
 
