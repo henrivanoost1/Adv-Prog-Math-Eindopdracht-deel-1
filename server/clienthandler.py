@@ -54,24 +54,33 @@ class ClientHandler(threading.Thread):
                     else:
                         pass
 
-                if getal1 == user_info[1]:
+                if getal1 in user_info:
                     if getal2 == user_info[2]:
                         antw = '1'
-                        with open('data\data.json', 'r') as f:
-                            change = json.load(f)
+                        # with open('data\data.json', 'r') as f:
+                        #     change = json.load(f)
 
-                        # hier plaats je status van login naar 1 dus iedereen dat op 1 staat is ingelogd en er moet op de loguit hetzelfe maar terug naar 0 en dan zijn ze pas uitgelogd
-                        change["user_info"]["username" ==
-                                            f'"{getal1}"']["status"] = 1
+                        # # hier plaats je status van login naar 1 dus iedereen dat op 1 staat is ingelogd en er moet op de loguit hetzelfe maar terug naar 0 en dan zijn ze pas uitgelogd
+                        # change["user_info"]["username" ==
+                        #                     f'"{getal1}"']["status"] = 1
 
-                        with open('data\data.json', 'w') as f:
-                            json.dump(change, f, indent=4)
+                        # with open('data\data.json', 'w') as f:
+                        #     json.dump(change, f, indent=4)
 
                     else:
                         antw = '2'
 
                 else:
                     antw = '3'
+
+                for user in user_data:
+                    username_from_json = user["username"]
+
+                    if getal1 == username_from_json:
+                        user["status"] = 1
+
+                with open("data\data.json", "w") as w:
+                    json.dump(data, w, indent=4)
 
                 user_info.clear()
                 io_stream_client.write(f"{antw}\n")
@@ -157,9 +166,25 @@ class ClientHandler(threading.Thread):
                 self.print_popular_search_server(
                     "Most requested data: statistics")
 
-            elif msg == "Log out":
+            elif "Logout" in msg:
+                database = "data\data.json"
+                data = json.loads(open(database).read())
+                user_data = data['user_info']
 
                 self.print_bericht_gui_server(msg)
+                username_out = msg[7:]
+                self.print_bericht_gui_server(username_out)
+
+                for user in user_data:
+                    username_from_json = user["username"]
+
+                    if username_out == username_from_json:
+                        user["status"] = 0
+
+                with open("data\data.json", "w") as w:
+                    json.dump(data, w, indent=4)
+
+                self.print_bericht_gui_server("log out succes")
                 # io_stream_client.write(f"{result}\n")
                 # io_stream_client.flush()
 

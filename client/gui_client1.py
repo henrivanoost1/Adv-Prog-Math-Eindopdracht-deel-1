@@ -18,6 +18,7 @@ class Window(Frame):
         self.master = master
         self.init_window()
         self.makeConnnectionWithServer()
+        self.username = ""
         # self.antwoordParam = Tkinter.StringVar()
 
     # Creation of init_window
@@ -147,7 +148,8 @@ class Window(Frame):
                width=10, height=1, command=self.log_out).pack()
 
     def log_out(self):
-        msg = "Log out"
+        username_out = self.username
+        msg = f'Logout {username_out}'
         self.my_writer_obj.write("Verifying\n")
         self.my_writer_obj.write(f"{msg}\n")
         logging.info(f"Sending message: {msg}")
@@ -385,6 +387,7 @@ class Window(Frame):
             logging.info(f"Answer server: {answer}")
 
             if answer == '1':
+                self.username = username1
                 self.login_sucess()
             elif answer == '2':
                 self.password_not_recognised()
@@ -436,6 +439,7 @@ class Window(Frame):
         # Label(login_success_screen, text="Login Success").pack()
         # Button(login_success_screen, text="OK",
         #        command=self.delete_login_success).pack()
+
         Label(login_screen, text="Login Success",
               fg="green", font=("calibri", 11)).pack()
         Label(login_screen, text="Please wait until this window closes",

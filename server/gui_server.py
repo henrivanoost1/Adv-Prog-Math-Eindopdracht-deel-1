@@ -117,6 +117,12 @@ class ServerWindow(Frame):
                 self.messages_queue.task_done()
                 message = self.messages_queue.get()
 
+            elif "log out succes" in message:
+                self.lstnumbers.insert(END, message)
+                self.get_online_users()
+                self.messages_queue.task_done()
+                message = self.messages_queue.get()
+
             else:
                 self.lstnumbers.insert(END, message)
                 self.messages_queue.task_done()

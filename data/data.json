@@ -4,7 +4,7 @@
             "name": "11",
             "username": "22",
             "mail": "33",
-            "status": 1
+            "status": 0
         },
         {
             "name": "laurens",
@@ -40,6 +40,12 @@
             "name": "maud",
             "username": "maudcarre",
             "mail": "mc@gmail.com",
+            "status": 0
+        },
+        {
+            "name": "thibault",
+            "username": "tibo",
+            "mail": "tibo@mailtje.com",
             "status": 0
         }
     ]
