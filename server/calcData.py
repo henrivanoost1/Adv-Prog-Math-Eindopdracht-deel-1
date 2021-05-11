@@ -28,19 +28,24 @@ class dataHandler():
         df = self.df
         if value == "gender":
             arr_value = []
-            aantal_man = df[df["gender"] == "Male"].id.count()
+            aantal_man = df[df["gender"] == "Male"].where(
+                df["stroke"] == 1).id.count()
             arr_value.append(str(aantal_man))
-            aantal_vrouw = df[df["gender"] == "Female"].id.count()
+            aantal_vrouw = df[df["gender"] == "Female"].where(
+                df["stroke"] == 1).id.count()
             arr_value.append(str(aantal_vrouw))
-            aantal_anders = df[df["gender"] == "Other"].id.count()
+            aantal_anders = df[df["gender"] == "Other"].where(
+                df["stroke"] == 1).id.count()
             arr_value.append(str(aantal_anders))
             array_to_json = json.dumps(arr_value)
             # arr_value[aantal_man, aantal_vrouw, aantal_anders]
         elif value == "heart_disease":
             arr_value = []
-            aantal_yes = df[df["heart_disease"] == 1].id.count()
+            aantal_yes = df[df["heart_disease"] == 1].where(
+                df["stroke"] == 1).id.count()
             arr_value.append(str(aantal_yes))
-            aantal_no = df[df["heart_disease"] == 0].id.count()
+            aantal_no = df[df["heart_disease"] == 0].where(
+                df["stroke"] == 1).id.count()
             arr_value.append(str(aantal_no))
             array_to_json = json.dumps(arr_value)
 
@@ -61,7 +66,7 @@ class dataHandler():
         df = self.df
 
         age = int(age1)
-        result = df[df["age"] == age].id.count()
+        result = df[df["age"] == age].where(df["stroke"] == 1).id.count()
 
         print(result)
         return result
