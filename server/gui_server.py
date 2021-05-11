@@ -63,6 +63,10 @@ class ServerWindow(Frame):
 
         self.lstonline.grid(row=11, column=0, sticky=N + S + E + W)
         self.scrollbar3.grid(row=11, column=1, sticky=N + S)
+        # self.buttonMessage = Button(
+        #     self, textvariable="Send Message", command=self.start_stop_server)
+        # self.buttonServer.grid(row=3, column=0, columnspan=2, pady=(
+        #     5, 5), padx=(5, 5), sticky=N + S + E + W)
 
         # Label(self, text="Zoekopdrachten per client:").grid(row=12)
         # self.scrollbar4 = Scrollbar(self, orient=VERTICAL)
